@@ -22,7 +22,6 @@ namespace RockPaperScissorsGame
                 { humanPlayer.GetType(), 0 },
                 { computerPlayer.GetType(), 0}
             };
-
         }
 
         public Choice GetComputerPlayerChoice => _computerPlayer.Choice;

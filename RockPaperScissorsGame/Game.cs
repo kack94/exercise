@@ -13,6 +13,24 @@ namespace RockPaperScissorsGame
 
         private readonly Dictionary<Type, int> _score;
 
+        private static readonly IReadOnlyList<(Choice HumanPlayerChoice, Choice ComputerPlayerChoice, GameResult Result)> _combinations =
+           new List<(Choice HumanPlayerChoice, Choice ComputerPlayerChoice, GameResult Result)>
+           {
+                (Choice.Rock, Choice.Scissors, GameResult.HumanPlayerWon),
+                (Choice.Paper, Choice.Rock, GameResult.HumanPlayerWon),
+                (Choice.Scissors, Choice.Paper, GameResult.HumanPlayerWon),
+                (Choice.Scissors, Choice.Rock, GameResult.ComputerPlayerWon),
+                (Choice.Rock, Choice.Paper, GameResult.ComputerPlayerWon),
+                (Choice.Paper, Choice.Scissors, GameResult.ComputerPlayerWon),
+                (Choice.Scissors, Choice.Scissors, GameResult.Tie),
+                (Choice.Paper, Choice.Paper, GameResult.Tie),
+                (Choice.Rock, Choice.Rock, GameResult.Tie)
+           };
+
+        public GameResult SelectWinner(Choice humanPlayerChoice, Choice computerPlayerChoice) => _combinations
+          .FirstOrDefault(x => x.HumanPlayerChoice == humanPlayerChoice && x.ComputerPlayerChoice == computerPlayerChoice)
+          .Result;
+
         public Game(HumanPlayer humanPlayer, ComputerPlayer computerPlayer)
         {
             _humanPlayer = humanPlayer;
@@ -27,6 +45,8 @@ namespace RockPaperScissorsGame
         public Choice GetComputerPlayerChoice => _computerPlayer.Choice;
 
         public Choice GetHumanPlayerChoice => _humanPlayer.Choice;
+
+        public Choice GenerateChoice() => _computerPlayer.GenerateChoice();
 
         public Player GetRoundWinner(GameResult result)
         {
@@ -61,33 +81,14 @@ namespace RockPaperScissorsGame
             _humanPlayer.SetChoice(choice);
         }
 
-        public void SetComputerPlayerChoice()
+        public void SetComputerPlayerChoice(Choice computerChoice)
         {
-            var computerChoice = _computerPlayer.GenerateChoice();
             _computerPlayer.SetChoice(computerChoice);
         }
 
         public void AddPointToTheWinner(Player winner)
         {
             _score[winner.GetType()]++;
-        }
-
-        public GameResult SelectWinner(Choice humanPlayerChoice, Choice computerPlayerChoice)
-        {
-            if (humanPlayerChoice == Choice.Rock && computerPlayerChoice == Choice.Scissors)
-                return GameResult.HumanPlayerWon;
-            else if (humanPlayerChoice == Choice.Paper && computerPlayerChoice == Choice.Rock)
-                return GameResult.HumanPlayerWon;
-            else if (humanPlayerChoice == Choice.Scissors && computerPlayerChoice == Choice.Paper)
-                return GameResult.HumanPlayerWon;
-            else if (humanPlayerChoice == Choice.Scissors && computerPlayerChoice == Choice.Rock)
-                return GameResult.ComputerPlayerWon;
-            else if (humanPlayerChoice == Choice.Rock && computerPlayerChoice == Choice.Paper)
-                return GameResult.ComputerPlayerWon;
-            else if (humanPlayerChoice == Choice.Paper && computerPlayerChoice == Choice.Scissors)
-                return GameResult.ComputerPlayerWon;
-            else
-                return GameResult.Tie;
         }
     }
 }

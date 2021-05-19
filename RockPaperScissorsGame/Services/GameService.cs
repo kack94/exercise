@@ -50,10 +50,10 @@ namespace RockPaperScissorsGame.Services
 
             while (roundsCounter <= NumberOfRounds)
             {
-                Console.WriteLine("Specify your choice:\n" +
-                   $"1.{Choice.Paper} \n" +
-                   $"2.{Choice.Rock} \n" +
-                   $"3.{Choice.Scissors} \n");
+                Console.WriteLine($"Specify your choice: { Environment.NewLine }" +
+                    $"1.{ Choice.Paper } { Environment.NewLine }" +
+                    $"2.{ Choice.Rock } { Environment.NewLine }" +
+                    $"3.{ Choice.Scissors } { Environment.NewLine }");
 
                 string input = Console.ReadLine();
 
@@ -64,11 +64,15 @@ namespace RockPaperScissorsGame.Services
                 }
                 else
                 {
-                    Console.WriteLine("Invalid choice, try again \n");
+                    Console.WriteLine($"Invalid choice, try again { Environment.NewLine }");
                     continue;
                 }
 
-                game.SetComputerPlayerChoice();
+                var computerChoice = game.GenerateChoice();
+                game.SetComputerPlayerChoice(computerChoice);
+
+                Console.WriteLine($"Computer choice: { game.GetComputerPlayerChoice }");
+                Console.WriteLine($"{ playerName } choice: { game.GetHumanPlayerChoice }");
 
                 var roundResult = game.SelectWinner(game.GetHumanPlayerChoice, game.GetComputerPlayerChoice);
                 var roundWinner = game.GetRoundWinner(roundResult);
@@ -81,7 +85,7 @@ namespace RockPaperScissorsGame.Services
                 {
                     game.AddPointToTheWinner(roundWinner);
 
-                    Console.WriteLine($"{roundWinner.Name} wins round {roundsCounter} \n");
+                    Console.WriteLine($"{ roundWinner.Name } wins round { roundsCounter } { Environment.NewLine }");
 
                     roundsCounter++;
                 }
@@ -89,7 +93,7 @@ namespace RockPaperScissorsGame.Services
 
             var winner = game.GetGameWinner();
 
-            Console.WriteLine($"The winner is {winner.Name}");
+            Console.WriteLine($"The winner is { winner.Name }");
         }
     }
 }
